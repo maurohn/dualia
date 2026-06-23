@@ -119,33 +119,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // --- BACKGROUND SLIDESHOW ---
+    // --- BACKGROUND SLIDESHOW (HERO ONLY) ---
     const heroSlides = document.querySelectorAll('.hero-slide');
-    const scrollytellSlides = document.querySelectorAll('.scrollytell-bg');
     let currentSlide = 0;
-    const totalSlides = Math.max(heroSlides.length, scrollytellSlides.length);
+    const totalSlides = heroSlides.length;
     const slideInterval = 5000; // Cambiar imagen cada 5 segundos
 
     function nextSlide() {
         if (totalSlides <= 1) return;
         
-        // Quitar clase activa de los slides actuales
+        // Quitar clase activa del slide actual
         if (heroSlides[currentSlide]) {
             heroSlides[currentSlide].classList.remove('active');
-        }
-        if (scrollytellSlides[currentSlide]) {
-            scrollytellSlides[currentSlide].classList.remove('active');
         }
         
         // Avanzar al siguiente índice
         currentSlide = (currentSlide + 1) % totalSlides;
         
-        // Agregar clase activa a los siguientes slides
+        // Agregar clase activa al siguiente slide
         if (heroSlides[currentSlide]) {
             heroSlides[currentSlide].classList.add('active');
-        }
-        if (scrollytellSlides[currentSlide]) {
-            scrollytellSlides[currentSlide].classList.add('active');
         }
     }
 
@@ -154,23 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- SMOOTH PARALLAX SCROLL EFFECT (PROGRESSIVE ENHANCEMENT) ---
-    const scrollytellBgs = document.querySelectorAll('.scrollytell-bg');
-    if (scrollytellBgs.length > 0) {
+    const scrollytellBg = document.querySelector('.scrollytell-bg');
+    if (scrollytellBg) {
         window.addEventListener('scroll', () => {
-            const firstBg = scrollytellBgs[0];
-            const section = firstBg.closest('.scrollytell-section');
-            if (section) {
-                const rect = section.getBoundingClientRect();
-                const scrolledIntoView = rect.top < window.innerHeight && rect.bottom > 0;
-                
-                if (scrolledIntoView) {
-                    const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-                    // Traducir los fondos lentamente relativo al scrollport
-                    const transformValue = `translateY(${scrollPercent * 80 - 40}px) scale(1.15)`;
-                    scrollytellBgs.forEach(bg => {
-                        bg.style.transform = transformValue;
-                    });
-                }
+            const rect = scrollytellBg.parentElement.getBoundingClientRect();
+            const scrolledIntoView = rect.top < window.innerHeight && rect.bottom > 0;
+            
+            if (scrolledIntoView) {
+                const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                // Traducir el fondo lentamente relativo al scrollport
+                scrollytellBg.style.transform = `translateY(${scrollPercent * 80 - 40}px) scale(1.15)`;
             }
         });
     }
